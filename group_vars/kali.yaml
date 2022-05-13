@@ -1,0 +1,46 @@
+---
+basic_pkgs:
+  - sublime-text
+  - python-pip
+  - gcc-mingw-w64-i686
+  - libreoffice
+  - tree
+  - golang-go
+
+offsec_pkgs:
+  - gobuster
+  - remmina
+  - fcrackzip
+  - evil-winrm
+  - rlwrap
+  - bloodhound
+  - lynx
+
+git_clone:
+  - repo: https://github.com/ivan-sincek/php-reverse-shell.git
+    dest: /home/{{ user }}/offsec/tools/php-reverse-shell
+    update_repo: False
+  - repo: https://github.com/danielmiessler/SecLists.git
+    dest: /home/{{ user }}/offsec/SecLists
+    update_repo: True
+  - repo: https://github.com/EmpireProject/Empire.git
+    dest: /home/{{ user }}/offsec/tools/empire
+    update_repo: False
+  - repo: https://github.com/bitsadmin/wesng.git
+    dest: /home/{{ user }}/offsec/tools/wesng
+    update_repo: True
+  - repo: https://github.com/samratashok/nishang.git
+    dest: /home/{{ user }}/offsec/tools/nishang
+    update_repo: True
+  - repo: https://github.com/borjmz/aspx-reverse-shell.git
+    dest: /home/{{ user }}/offsec/tools/aspx-reverse-shell
+    update_repo: False
+  - repo: https://github.com/ropnop/kerbrute.git
+    dest: /home/{{ user }}/offsec/tools/kerbrute
+    update_repo: True
+
+copy_files:
+  - src: "files/nmap_scan.sh"
+    dest: "/home/{{ user }}/offsec/"
+    owner: "{{ user }}"
+    group: "{{ user }}"

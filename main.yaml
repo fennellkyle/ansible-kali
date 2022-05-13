@@ -1,0 +1,48 @@
+---
+- hosts: all
+  become: true
+  become_method: sudo
+  tasks:
+  - name: "sublime-text:gpg keys"
+    apt_key:
+      url: https://download.sublimetext.com/sublimehq-pub.gpg
+      state: present
+  - name: "sublime-text: repo source"
+    lineinfile:
+      dest: /etc/apt/sources.list.d/sublime-text.list
+      line: "deb https://download.sublimetext.com/ apt/stable/"
+      create: true
+
+  - name: "update packages and upgrade"
+    apt:
+      update_cache: true
+      upgrade: dist
+      force_apt_get: true
+
+  - name: "install basic packages"
+    apt:
+      pkg: "{{ item }}"
+    loop: "{{ basic_pkgs}}"
+  - name: "install offsec packages"
+    apt:
+      pkg: "{{ item }}"
+    loop: "{{ offsec_pkgs }}"
+
+  - name: "git clone"
+    git:
+      repo: "{{ item.repo }}"
+      dest: "{{ item.dest }}"
+      clone: true
+      update: "{{ item.update_repo }}"
+    loop: "{{ git_clone }}"
+    become: true
+    become_user: "{{ user }}"
+
+  - name: "copy files"
+    copy:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: "{{ item.owner }}"
+      group: "{{ item.group }}"
+      mode: '0700'
+    loop: "{{ copy_files }}"
